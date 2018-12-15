@@ -12,22 +12,37 @@ ncat -l 9999
 ncat localhost 9999
 
 #### First web server  
-
+```
 python3 -m http.server 8000
+```
 
 #### URI  
 
-https is the scheme;  
+http/https/file is the scheme;  
 en.wikipedia.org is the hostname;  
-and /wiki/Fish is the path.  
+and /wiki/Fish is the path.
+https://en.wikipedia.org/wiki/Oxygen#Discovery
+'#' is a Fragment
+https://www.google.com/search?q=fish
+?q=fish is a query
 
 http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 
-#### DEFAULT PORT  
+#### Hostname & Ports
+```
+host www.google.com
+```
+
+Packets - IP address of computer that sent it and computer that receives it
+IP - computers
+Port - Programs
+
+
+#### Default Port
 HTTP:80  
 HTTPS is port 443
 
-#### HTTP GET REQUEST
+#### HTTP GET Request
 
 ncat 127.0.0.1 8000  
 GET / HTTP/1.1  
@@ -40,13 +55,22 @@ Date: Sat, 19 May 2018 12:52:14 GMT
 Content-type: text/html; charset=utf-8
 Content-Length: 418
 
+**cookies** are a Web feature that lets servers store data on the browser, for instance to keep a user logged in. To set a cookie, the server sends the Set-Cookie header. The browser will then send the cookie data back in a Cookie header on subsequent requests.
+
+**Content-type header** indicates the kind of data that the server is sending.
+
+**Content-Length header** which tells the client how long (in bytes) the response body will be.
+If the server sends this, then the client can reuse the connection to send another request after it's read the first response. Browsers use this so they can fetch multiple pieces of data (such as images on a web page) without having to reconnect to the server.
+
+
+
 Body:
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">  
 <html>
 </html>
 
-#### HTTP RESPONSE
+#### HTTP Response
 
 <ol>
 <li>status line
