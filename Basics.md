@@ -182,4 +182,65 @@ Why don't we want to use GET for submitting the form? Imagine if a user did this
 
 **Note**   
  If there's a request body at all, the browser will send the length of the request body in the Content-Length header.
+
+ But in an HTTP request, it's also possible that the body will be empty, in which case the browser might not send a Content-length header at all. This means we have to be a little careful when accessing the headers from the self.headers object. If we do self.headers['content-length'] and there's no such header, our code will crash with a KeyError. Instead we'll use the .get dictionary method to get the header value safely.
+ ```
+ length = int(self.headers.get('Content-length', 0))
+ data = self.rfile.read(length).decode()
+```
 ***
+
+
+###### Post-Redirect-Get
+
+You go to http://localhost:8000/ in your browser. Your browser sends a GET request to the server, which replies with a 200 OK and a piece of HTML. You see a form for posting comments, and a list of the existing comments. (But at the beginning, there are no comments posted yet.)
+You write a comment in the form and submit it. Your browser sends it via POST to the server.
+The server updates the list of comments, adding your comment to the list. Then it replies with a 303 redirect, setting the Location: / header to tell the browser to request the main page via GET.
+The redirect response causes your browser to go back to the same page you started with, sending a GET request, which replies with a 200 OK and a piece of HTML …
+
+
+###### Making Requests
+```
+>>> import requests
+>>> a = requests.get('http://www.udacity.com')
+>>> a
+<Response [200]>
+>>> type(a)
+<class 'requests.models.Response'>
+```
+
+###### JSON
+```
+>>> a = requests.get('http://swapi.co/api/people/1/')
+>>> a.json()['name']
+'Luke Skywalker'
+```
+```
+import requests
+
+
+def SampleRecord():
+    r = requests.get("http://uinames.com/api?ext&region=United%20States",
+                     timeout=2.0)
+    j = r.json()
+
+    return "My name is {} {} and the PIN on my card is {}.".format(
+        j["name"],
+        j["surname"],
+        j["credit_card"]["pin"]
+    )
+
+if __name__ == '__main__':
+    print(SampleRecord())
+```
+
+### HTTP in real world
+
+###### HTTP caching
+https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching
+
+###### Certificates
+https://letsencrypt.org/
+
+### TODO:
+TinyURL app
