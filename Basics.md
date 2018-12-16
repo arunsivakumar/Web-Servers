@@ -105,3 +105,6 @@ Location: https://www.google.com
 (Enter) Twice
 
 -Redirects to google.com
+
+
+### 2. Web from python
