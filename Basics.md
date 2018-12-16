@@ -108,3 +108,78 @@ Location: https://www.google.com
 
 
 ### 2. Web from python
+
+**Encode**   
+If you want to send a string over the HTTP connection, you have to encode the string into a bytes object
+
+```
+>>> len('ねこ')
+2
+>>> len('ねこ'.encode())
+6
+```
+
+ if you try to start EchoServer.py while HelloServer.py is still running … or vice versa?
+ New server exits with OSError exception   
+
+ ###### Queries
+
+ ```
+ >>> from urllib.parse import urlparse, parse_qs
+>>> address = 'https://www.google.com/search?q=gray+squirrel&tbm=isch'
+>>> parts = urlparse(address)
+>>> print(parts)
+ParseResult(scheme='https', netloc='www.google.com', path='/search', params='', query='q=gray+squirrel&tbm=isch', fragment='')
+>>> print(parts.query)
+q=gray+squirrel&tbm=isch
+>>> query = parse_qs(parts.query)
+>>> query
+{'q': ['gray squirrel'], 'tbm': ['isch']}
+```
+
+###### URL quoting - URL-encoding or URL-escaping
+
+It means translating a string into a form that doesn't have any special characters in it, but in a way that can be reversed (unquoted) later.
+
+###### HTML and forms
+
+The form action is the URI to which the form fields will be submitted.
+
+###### GET & POST
+
+```
+POST / HTTP/1.1
+Host: localhost:9999
+Connection: keep-alive
+Content-Length: 27
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: null
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+magic=mystery&secret=spooky%
+```
+```
+GET /?magic=mystery&secret=spooky HTTP/1.1
+Host: localhost:9999
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+```
+***
+**POST**
+When a browser submits a form as a POST request, it doesn't encode the form data in the URI path, the way it does with a GET request. Instead, it sends the form data in the request body, underneath the headers. The request also includes Content-Type and Content-Length headers, which we've previously only seen on HTTP responses.
+
+**Why no GET**
+Why don't we want to use GET for submitting the form? Imagine if a user did this. They write a message and press the submit button … and the message text shows up in their URL bar. If they press reload, it sends the message again. If they bookmark that URL and go back to it, it sends the message again. This doesn't seem like such a great experience. So we'll use POST for message submission, and GET to display the main page.
+
+**Note**   
+ If there's a request body at all, the browser will send the length of the request body in the Content-Length header.
+***
